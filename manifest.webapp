@@ -1,0 +1,22 @@
+{
+    "name": "Firefox OS Webbing",
+    "launch_path": "/index.html",
+    "version": "0.1",
+    "description": "A template for packaging web apps for Firefox OS.",
+    "icons": {
+        "60": "/img/icon-60.png",
+        "128": "/img/icon-128.png"
+    },
+    "developer": {
+        "name": "Yahoo",
+        "url": "http://yahoo.com"
+    },
+    "fullscreen" : "true",
+    "type": "privileged",
+    "default_locale": "en",
+    "permissions": {
+        "browser": {
+            "description": "Allows us to have additional control over how our app is rendered."
+        }
+    }
+}

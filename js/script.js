@@ -1,0 +1,224 @@
+(function app() {
+    'use strict';
+
+    // ==========================================================
+    // Vars
+    // ==========================================================
+
+    var _browser;
+    var _footer;
+    var _noConnection;
+    var _spinner;
+    var _url;
+    var _config;
+
+    var APP_URL;
+    
+    
+    // ==========================================================
+    // Events
+    // ==========================================================
+
+    window.addEventListener('load', init);
+    function init() {
+        retrieveElements();
+        addListeners();
+        onConnectionStatusChange();
+    }
+
+    /**
+     * Occurs when the online connectivity status of the device has changed.
+     */
+    function onConnectionStatusChange() {
+        if (navigator.onLine) {
+            showNoConnection(false);
+            ready();
+        } else {
+            showNoConnection(true);
+        }
+    }
+
+    /**
+     * Occurs when the URL of the browser element has changed.
+     */
+    function onUrlChange(event) {
+        _url = event.detail;
+
+        // Ensure we have a valid config
+        if (_url && _config && _config.footer) {
+            // Grab whitelist and blacklist to decide if we're showing a footer
+            var whitelist = _config.footer.whitelist;
+            var blacklist = _config.footer.blacklist;
+
+            // Default to yes
+            var shouldShow = true;
+
+            // Allow blacklist to turn off the footer
+            if (doesUrlMatchList(blacklist)) {
+                shouldShow = false;
+            }
+
+            // But allow the whitelist to override the blacklist
+            if (doesUrlMatchList(whitelist)) {
+                shouldShow = true;
+            }
+
+            showFooter(shouldShow);
+        }
+    }
+
+    /**
+     * Occurs when the back button in the footer is clicked.
+     */
+    function onBackClick(e) {
+        e.preventDefault();
+        _browser.src = APP_URL;
+    }
+
+    /**
+     * Occurs when the browser has finished loading the current page
+     */
+    function onPageLoad(e) {
+        // If we have loaded the original 
+        if (_url) {
+            showSpinner(false);
+            showBrowser(true);
+        }
+    }
+
+    function onConfigLoaded() {
+        if (this.readyState === 4 && this.status === 200) {
+            _config = JSON.parse(this.response);
+        } else {
+            onConfigLoadError.call(this);
+        }
+    }
+
+    function onConfigLoadError() {
+        console.error(this.status.text);
+    }
+
+
+    // ==========================================================
+    // Helpers
+    // ==========================================================
+
+    function retrieveElements() {
+        _browser = document.getElementById('browser');
+        _footer = document.getElementById('footer');
+        _noConnection = document.getElementById('no-connection');
+        _spinner = document.getElementById('spinner');
+        new Spinner({
+            'color': '#fff', 
+            'lines': 18,
+            'radius': 40,
+            'length': 15,
+            'speed': 0.8,
+            'trail': 40
+        }).spin(_spinner);
+    }
+
+    function addListeners() {
+        _browser.addEventListener('mozbrowserlocationchange', onUrlChange);
+        _browser.addEventListener('mozbrowserloadend', onPageLoad);
+        window.addEventListener('online', onConnectionStatusChange);
+        window.addEventListener('offline', onConnectionStatusChange);
+        document.getElementById('back-btn').addEventListener('click', onBackClick);
+        document.getElementById('back-txt').addEventListener('click', onBackClick);
+
+        var configRequest = new XMLHttpRequest();
+        configRequest.addEventListener('load', onConfigLoaded);
+        configRequest.addEventListener('error', onConfigLoadError);
+        configRequest.open('get', 'webbing.json', true);
+        configRequest.overrideMimeType('application/json');
+        configRequest.send();
+    }
+
+    function ready() {
+        // Ensure we're online
+        if (!navigator.onLine) {
+            return;
+        }
+
+        navigator.mozL10n.ready (function() {
+            var _ = navigator.mozL10n.get;
+            APP_URL = _('core_site_url');
+            if (isBrowserApiAvailable()) {
+                _browser.src = APP_URL;
+            } else {
+                window.location.href = APP_URL;
+            }
+        });
+    }
+
+    function isBrowserApiAvailable() {
+        if (typeof(_browser.goBack) === 'function') {
+            return true;
+        }
+        return false;
+    }
+
+    function getRegexFromPattern(rawString) {
+        var regexUrl = APP_URL.replace(/\./g, '\\.');
+        regexUrl = regexUrl.replace(/\?/g, '\\?');
+        rawString = rawString.replace(/({APP_URL})/g, regexUrl);
+        return new RegExp(rawString);
+    }
+
+    function doesUrlMatchList(list) {
+        if (list.constructor === Array) {
+            for (var i = 0; i < list.length; i++) {
+                var regex = getRegexFromPattern(list[i]);
+                if (regex.test(_url)) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    function showNoConnection(show) {
+        if (show) {
+            showBrowser(false);
+            showFooter(false);
+            _noConnection.classList.remove('hidden');
+        } else {
+            _noConnection.classList.add('hidden');
+        }
+    }
+
+    function showFooter(show) {
+        if (show) {
+            _footer.classList.remove('hidden');
+        } else {
+            _footer.classList.add('hidden');
+        }
+    }
+
+    function showBrowser(show) {
+        if (show) {
+            if (_browser.classList.contains('hidden')) {
+                _browser.classList.remove('hidden');
+            }
+        } else {
+            _browser.classList.add('hidden');
+        }
+    }
+
+    function showSpinner(show) {
+        if (show) {
+            _spinner.classList.remove('hidden');
+        } else {
+            // Only animate if we're currently visible
+            if (!_spinner.classList.contains('hidden')) {
+                _spinner.classList.add('fadeout');
+
+                // When it's done fading, get rid of the fading class and hide the spinner
+                _spinner.addEventListener('animationend', function animationEnd () {
+                    _spinner.classList.remove('fadeout');
+                    _spinner.classList.add('hidden');
+                    _spinner.removeEventListener('animationend', animationEnd);
+                });
+            }
+        }
+    }
+})();

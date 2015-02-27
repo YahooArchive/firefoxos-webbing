@@ -1,0 +1,6 @@
+{
+    "footer": {
+        "blacklist": ["^{APP_URL}.*$"],
+        "whitelist": []
+    }
+}

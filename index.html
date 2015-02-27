@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title data-l10n-id="app_title">Yahoo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Localization Files -->
+    <script defer src="./js/lib/l10n.js" charset="utf-8"></script>
+    <meta name="defaultLanguage" content="en-US">
+    <meta name="availableLanguages" content="es">
+    <link rel="localization" href="./locales/app.{locale}.properties">
+    <link rel="resource" type="application/l10n" href="./locales/locales.ini" />
+    
+    <script src="./js/lib/spin.min.js"></script>
+    <script src="./js/script.js"></script>
+
+    <link href="./css/style.css" rel="stylesheet">
+    <link rel="dns-prefetch" href="" data-l10n-id="dns-prefetch">
+    <link rel="prefetch" href="" data-l10n-id="prefetch">
+    <link rel="next" href="" data-l10n-id="next-link">
+
+</head>
+<body>
+    <!-- What to show if there is no internet connection. -->
+    <div id="no-connection" class="hidden">
+        <strong data-l10n-id="no_connection"></strong>
+        <span data-l10n-id="no_connection_more"></span>
+    </div>
+
+    <!-- The loading spinner -->
+    <div id="spinner"></div>
+
+    <!-- Footer that is shown when no back navigation exists -->
+    <div id="footer" class="hidden">
+        <img id="back-btn" src="./img/back-icon.png" />
+        <span id="back-txt" data-l10n-id="back_txt"></span>
+    </div>
+    
+    <!-- Frame where we show the web app -->
+    <iframe id="browser" width="100%" height="100%" class="hidden" mozbrowser remote>
+
+</body>
+</html>

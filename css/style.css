@@ -1,0 +1,123 @@
+/**
+ * ==================================================
+ * Tags
+ * ==================================================
+ */
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-size: 100%;
+    overflow: hidden;
+    font-family: sans-serif;
+
+    user-select: none;
+    -moz-user-select: none;
+}
+
+body {
+    height: 100%;
+    text-align: center;
+}
+
+
+/**
+ * ==================================================
+ * Specific Elements
+ * ==================================================
+ */
+#no-connection {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 20px;
+    color: #fff;
+}
+
+#spinner {
+    display: inline-block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../img/icon-spinner.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #430096;
+    z-index: 2000000000;
+}
+
+#browser {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #fff;
+}
+
+#footer {
+    width: 100%;
+    height: 42px;
+    line-height: 42px;
+    background-color: #400090;
+    text-align: left;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+#footer img {
+    padding-left: 10px;
+    height: 42px;
+    float: left;
+    width: auto;
+}
+
+#footer span {
+    color: #fff;
+    margin-left: 10px;
+    vertical-align: middle;
+    display: inline-block;
+    font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
+}
+
+
+/**
+ * ==================================================
+ * Classes
+ * ==================================================
+ */
+.hidden {
+    display: none !important;
+}
+
+.fadein {
+    animation: fadein 1s;
+    opacity: 1;
+}
+
+.fadeout {
+    animation: fadeout 1s;
+    opacity: 1;
+}
+
+
+/**
+ * ==================================================
+ * Animations
+ * ==================================================
+ */
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
