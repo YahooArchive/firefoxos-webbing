@@ -55,3 +55,18 @@ A common thing that you might want to change is when the footer appears, so we b
 
 The default ```webbing.json``` file will hide the footer on any URL in your app's domain, and show it whenever your user navigate's off-domain.
 
+
+### Credits
+This template was inspired by the work of the Harald Kirschner and Louis Stowasser
+* Project Code: https://github.com/louisstow/splashpack
+
+l10n
+* Project Code: https://github.com/mozilla-b2g/gaia/blob/master/shared/js/l10n.js
+* Copyright (c) 2012, Mozilla Foundation
+* License: https://github.com/mozilla-b2g/gaia/blob/master/LICENSE
+
+spin.js
+* Project Code: https://github.com/fgnass/spin.js
+* Copyright (c) 2011-2014 Felix Gnass
+* License: https://github.com/fgnass/spin.js/blob/master/LICENSE.txt
+
