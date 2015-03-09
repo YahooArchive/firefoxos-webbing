@@ -11,7 +11,6 @@
         "name": "Yahoo",
         "url": "http://yahoo.com"
     },
-    "fullscreen" : "true",
     "type": "privileged",
     "default_locale": "en",
     "permissions": {
