@@ -33,7 +33,11 @@
         if (navigator.onLine) {
             showNoConnection(false);
             showBrowser(true);
+            determineFooterVisibility();
         } else {
+            showBrowser(false);
+            showFooter(false);
+            showSpinner(false);
             showNoConnection(true);
         }
     }
@@ -43,37 +47,7 @@
      */
     function onUrlChange(event) {
         _url = event.detail;
-
-        if (_url && _config && _config.footer) {
-            var whitelist = _config.footer.whitelist;
-            var blacklist = _config.footer.blacklist;
-
-            var shouldShow = true;
-
-            // Apply blacklist
-            if (blacklist.constructor === Array) {
-                for (var i = 0; i < blacklist.length; i++) {
-                    var regex = getRegexFromPattern(blacklist[i]);
-                    if (regex.test(_url)) {
-                        shouldShow = false;
-                        break;
-                    }
-                }
-            }
-
-            // Apply whitelist
-            if (whitelist.constructor === Array) {
-                for (var i = 0; i < whitelist.length; i++) {
-                    var regex = getRegexFromPattern(whitelist[i]);
-                    if (regex.test(_url)) {
-                        shouldShow = true;
-                        break;
-                    }
-                }
-            }
-
-            showFooter(shouldShow);
-        }
+        determineFooterVisibility();
     }
 
     /**
@@ -119,13 +93,17 @@
      */
     function onLocalizationReady() {
         APP_URL = document.l10n.getSync('appUrl');
-        if (navigator.onLine) {
-            if (isBrowserApiAvailable()) {
-                _browser.src = APP_URL;
-            } else {
-                window.location.href = APP_URL;
-            }
+        
+        if (isBrowserApiAvailable()) {
+            _browser.src = APP_URL;
         } else {
+            window.location.href = APP_URL;
+        }
+
+        if (!navigator.onLine) {
+            showBrowser(false);
+            showFooter(false);
+            showSpinner(false);
             showNoConnection(true);
         }
     }
@@ -167,6 +145,39 @@
         configRequest.send();
     }
 
+    function determineFooterVisibility() {
+        if (_url && _config && _config.footer) {
+            var whitelist = _config.footer.whitelist;
+            var blacklist = _config.footer.blacklist;
+
+            var shouldShow = true;
+
+            // Apply blacklist
+            if (blacklist.constructor === Array) {
+                for (var i = 0; i < blacklist.length; i++) {
+                    var regex = getRegexFromPattern(blacklist[i]);
+                    if (regex.test(_url)) {
+                        shouldShow = false;
+                        break;
+                    }
+                }
+            }
+
+            // Apply whitelist
+            if (whitelist.constructor === Array) {
+                for (var i = 0; i < whitelist.length; i++) {
+                    var regex = getRegexFromPattern(whitelist[i]);
+                    if (regex.test(_url)) {
+                        shouldShow = true;
+                        break;
+                    }
+                }
+            }
+
+            showFooter(shouldShow);
+        }
+    }
+
     function isBrowserApiAvailable() {
         if (typeof(_browser.goBack) === 'function') {
             return true;
@@ -183,9 +194,6 @@
 
     function showNoConnection(show) {
         if (show) {
-            showBrowser(false);
-            showFooter(false);
-            showSpinner(false);
             _noConnection.classList.remove('hidden');
         } else {
             _noConnection.classList.add('hidden');
