@@ -11,6 +11,7 @@
     var _spinner;
     var _url;
     var _config;
+    var _loadingTimer;
 
     var APP_URL;
     
@@ -66,6 +67,7 @@
         if (_url) {
             showSpinner(false);
             showBrowser(true);
+            clearTimeout(_loadingTimer);
         }
     }
 
@@ -75,6 +77,12 @@
     function onConfigLoaded() {
         if (this.readyState === 4 && this.status === 200) {
             _config = JSON.parse(this.response);
+
+            // Setup loading timeout
+            if (_config.loading_indicator && _config.loading_indicator.max_load_time) {
+                var maxLoadTime = parseInt(_config.loading_indicator.max_load_time);
+                _loadingTimer = setTimeout(onLoadingTimeoutReached, maxLoadTime);
+            }
         } else {
             onConfigLoadError.call(this);
         }
@@ -82,7 +90,6 @@
 
     /**
      * Occurs when there is an error loading the webbing.json config file.
-     * @return {[type]} [description]
      */
     function onConfigLoadError() {
         console.error(this.status.text);
@@ -93,7 +100,7 @@
      */
     function onLocalizationReady() {
         APP_URL = document.l10n.getSync('appUrl');
-        
+
         if (isBrowserApiAvailable()) {
             _browser.src = APP_URL;
         } else {
@@ -106,6 +113,14 @@
             showSpinner(false);
             showNoConnection(true);
         }
+    }
+
+    /**
+     * Occurs when we've reached the maximum allowable time to show the loading indicator.
+     */
+    function onLoadingTimeoutReached() {
+        showSpinner(false);
+        showBrowser(true);
     }
 
 
@@ -137,6 +152,7 @@
         document.getElementById('back-txt').addEventListener('click', onBackClick);
         document.l10n.ready(onLocalizationReady);
 
+        // Send request to get webbing.json
         var configRequest = new XMLHttpRequest();
         configRequest.addEventListener('load', onConfigLoaded);
         configRequest.addEventListener('error', onConfigLoadError);
