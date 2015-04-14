@@ -48,6 +48,13 @@ A common thing that you might want to change is when the footer appears, so we b
         // precedence over the patterns specified in "blacklist". You can use {APP_URL} to specify the app url for the 
         // current locale.
         "whitelist": []
+    },
+    // Describes properties relating to the loading screen that shows when your app is launching
+    "loading_indicator": {
+        // The maximum time the loading screen will show (in milliseconds). If you don't set this property, then the 
+        // loading screen will be dismissed when the page is fully loaded. You can set this if you want to hide
+        // the loading screen after a specified time, even if the page hasn't finished loaded yet.
+        "max_load_time": 2000
     }
 }
 ```
@@ -69,4 +76,3 @@ spin.js
 * Project Code: https://github.com/fgnass/spin.js
 * Copyright (c) 2011-2014 Felix Gnass
 * License: https://github.com/fgnass/spin.js/blob/master/LICENSE.txt
-
