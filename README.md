@@ -54,6 +54,8 @@ A common thing that you might want to change is when the footer appears, so we b
         // The maximum time the loading screen will show (in milliseconds). If you don't set this property, then the 
         // loading screen will be dismissed when the page is fully loaded. You can set this if you want to hide
         // the loading screen after a specified time, even if the page hasn't finished loaded yet.
+        // IMPORTANT: Due to the amount of work being done while the app is loading, this interval may not be accurate.
+        // On most sites variances should be small (~250ms), but could be up to 1000ms when loading complicated websites.
         "max_load_time": 2000
     }
 }

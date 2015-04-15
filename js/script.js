@@ -67,7 +67,7 @@
         if (_url) {
             showSpinner(false);
             showBrowser(true);
-            clearTimeout(_loadingTimer);
+            clearInterval(_loadingTimer);
         }
     }
 
@@ -81,7 +81,24 @@
             // Setup loading timeout
             if (_config.loading_indicator && _config.loading_indicator.max_load_time) {
                 var maxLoadTime = parseInt(_config.loading_indicator.max_load_time);
-                _loadingTimer = setTimeout(onLoadingTimeoutReached, maxLoadTime);
+
+                // Note: This is a hack. setTimeout() was very, very innacurate while the app was loading.
+                // (e.g. a 2000ms timer might take 3500ms to fire). I'm assuming that it's because a lot of
+                // work is being done to render the page, so timeouts lose accuracy. The solution is to poll
+                // every 100ms and keep track of how much time passed. These intervals are also very innaccurate,
+                // but tend to produce an overall result that is much closer to the expected time. However,
+                // that means we can only every guarantee accuracy to 100ms, but that should be sufficient.
+                var lastTime = new Date().getTime();
+                var totalTime = 0;
+                _loadingTimer = setInterval(function() {
+                    var currentTime = new Date().getTime();
+                    totalTime +=  currentTime - lastTime;
+                    lastTime = new Date().getTime();
+                    if (totalTime >= maxLoadTime) {
+                        onLoadingTimeoutReached();
+                        clearInterval(_loadingTimer);
+                    }
+                }, 100);
             }
         } else {
             onConfigLoadError.call(this);
