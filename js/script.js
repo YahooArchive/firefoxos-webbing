@@ -82,7 +82,7 @@
             if (_config.loading_indicator && _config.loading_indicator.max_load_time) {
                 var maxLoadTime = parseInt(_config.loading_indicator.max_load_time);
 
-                // Note: This is a hack. setTimeout() was very, very innacurate while the app was loading.
+                // Note: This is a hack. setTimeout() was very, very inaccurate while the app was loading.
                 // (e.g. a 2000ms timer might take 3500ms to fire). I'm assuming that it's because a lot of
                 // work is being done to render the page, so timeouts lose accuracy. The solution is to poll
                 // every 100ms and keep track of how much time passed. These intervals are also very innaccurate,
