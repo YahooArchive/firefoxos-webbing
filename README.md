@@ -13,7 +13,7 @@ Webbing solves those issues by providing the following features:
 * A footer with back navigation can appear over your site when the user navigates off-domain, allowing them to return to your app.
 * A modern splash screen is shown with a nice animation while the user waits for the inital load of your app.
 * The user will be shown a "No Network Connection" message when they are not connected to the internet.
-* Localization is already integrated using Mozilla's l10n.js Instructions on using it can be found [here](https://developer.mozilla.org/en-US/Apps/Build/Localization/Localizing_Firefox_OS_Apps).
+* Localization is already integrated using Mozilla's L20n.js. Instructions on using it can be found [here](https://github.com/l20n/l20n.js).
 
 ## Configuration
 
@@ -69,10 +69,10 @@ The default ```webbing.json``` file will hide the footer on any URL in your app'
 This template was inspired by the work of the Harald Kirschner and Louis Stowasser
 * Project Code: https://github.com/louisstow/splashpack
 
-l10n
-* Project Code: https://github.com/mozilla-b2g/gaia/blob/master/shared/js/l10n.js
+L20n
+* Project Code: https://github.com/l20n/l20n.js
 * Copyright (c) 2012, Mozilla Foundation
-* License: https://github.com/mozilla-b2g/gaia/blob/master/LICENSE
+* License: https://github.com/l20n/l20n.js/blob/master/LICENSE
 
 spin.js
 * Project Code: https://github.com/fgnass/spin.js
